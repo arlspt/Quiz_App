@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import './Quiz.css';
 
-const Quiz = ({ username }) => {
-    const [questions, setQuestions] = useState([]);
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [score, setScore] = useState(0);
+const Quiz = ({ username }) => { //2. menggunakan local storage
+    const [questions, setQuestions] = useState([]);          //Pertanyaan
+    const [currentQuestion, setCurrentQuestion] = useState(0); 
+    const [score, setScore] = useState(0);                   //Score total
     const [correctAnswers, setCorrectAnswers] = useState(0); // Jawaban benar
     const [wrongAnswers, setWrongAnswers] = useState(0);     // Jawaban salah
     const [timeLeft, setTimeLeft] = useState(60);            // Timer: 60 seconds
     const [finished, setFinished] = useState(false);
-    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [selectedAnswer, setSelectedAnswer] = useState(null); //Jumlah Jawaban
 
-    useEffect(() => {
+    useEffect(() => { //3. Mengambil data API
         const fetchQuestions = async () => {
             try {
+                //1. Mengambil pertanyaan kuis dari API 
                 const res = await fetch('https://opentdb.com/api.php?amount=5&category=27&difficulty=easy&type=multiple');
                 const data = await res.json();
                 if (data.results) {
@@ -39,7 +40,7 @@ const Quiz = ({ username }) => {
         }
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { //(3)Mengelola countdown timer
         if (timeLeft === 0) {
             setFinished(true);
         }
@@ -49,7 +50,7 @@ const Quiz = ({ username }) => {
         return () => clearInterval(timer);
     }, [timeLeft]);
 
-    useEffect(() => {
+    useEffect(() => { //(3)Menyimpan state aplikasi ke local storage
         if (!finished) {
             localStorage.setItem('quizData', JSON.stringify({
                 questions,
@@ -62,7 +63,7 @@ const Quiz = ({ username }) => {
         }
     }, [questions, currentQuestion, score, correctAnswers, wrongAnswers, timeLeft, finished]);
 
-    const handleAnswer = (answer) => {
+    const handleAnswer = (answer) => { //4. Mengecek jawaban benar/salah
         const isCorrect = answer === questions[currentQuestion].correct_answer;
         setSelectedAnswer(answer);
 

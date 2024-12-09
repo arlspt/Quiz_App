@@ -3,19 +3,19 @@ import './Login.css';
 
 const Login = ({ onLogin }) => {
     const [username, setUsername] = useState("");
-
+    //3. input form dikelola dengan menggunakan state username
     const handleSubmit = (e) => {
         e.preventDefault();
         if (username) {
-            onLogin(username);
+            onLogin(username); //4. ketika pengguna men-submit, dikirim ke parent komponen
         }
     };
 
-    return (
+    return ( //2. mengirim nama pengguna ke App
         <div className='login-container'>
             <form onSubmit={handleSubmit} className='login-form'>
                 <h2>Login</h2>
-                <input
+                <input //1. pengguna memasuka nama untuk memulai kuis
                     type="text"
                     placeholder="Enter your name"
                     value={username}
